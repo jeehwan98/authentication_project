@@ -1,13 +1,11 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import AuthHeader from "@/components/Authentication/AuthHeader";
+import LoginForm from "@/components/Authentication/LoginForm";
 
 export default function LoginPage() {
   return (
     <div className="px-10 py-2">
-      <h1>Login</h1>
-      <Button onClick={() => signIn("github", { callbackUrl: "/" })}>Sign in with Github</Button>
+      <AuthHeader />
+      <LoginForm />
     </div>
   )
 }

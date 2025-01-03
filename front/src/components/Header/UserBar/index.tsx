@@ -68,7 +68,7 @@ export default function UserBar() {
             </button>
             {isOpen && (
               <DropdownMenu>
-                <NavLink href={getUserId(session?.user?.email as string)} onClick={closeDropdown}>내 블로그</NavLink>
+                <NavLink href={getUserId(session?.user?.email as string)} onClick={closeDropdown}>내 프로필</NavLink>
                 <NavLink href="/setting" onClick={closeDropdown}>설정</NavLink>
                 <LogoutNavLink onClick={() => signOut()}>로그아웃</LogoutNavLink>
               </DropdownMenu>
