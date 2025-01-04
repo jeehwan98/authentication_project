@@ -29,31 +29,26 @@ export const authOptions: NextAuthOptions = {
               password: credentials?.password,
             }),
           });
+          const responseData = await response.json();
 
           if (!response.ok) {
-            throw new Error("Invalid email or password");
+            throw new Error(responseData.error || "Login failed");
           }
 
-          const responseData = await response.json();
-          return responseData; // responseData.login -> message: login success;
+          return responseData.success; // login success
         } catch (error) {
           console.error("error occurred: ", error);
-          throw new Error("Login failed. Please try again");
+          throw error || "An unexpected error occurred. Please try again.";
         }
       }
     })
   ],
-  session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/login"
-  },
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      console.log("token/;", token);
-      console.log("user/;", user);
-      console.log("account/;", account);
-      console.log("profile/;", profile);
+      // console.log("token/;", token);
+      // console.log("user/;", user);
+      // console.log("account/;", account);
+      // console.log("profile/;", profile);
       if (account) {
         if (account.provider === "github" && profile) {
           // Handle GitHub login
@@ -79,36 +74,11 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  // callbacks: {
-  //   async signIn({ user, account, profile }) {
-  //     if (account?.provider === "github") {
-  //       return true;
-  //     }
-
-  //     if (user) {
-  //       return true
-  //     }
-  //     return false
-  //   },
-  //   async jwt({ token, user }) {
-  //     if (user) {
-  //       token.id = user.id;
-  //       token.name = user.name;
-  //       token.email = user.email;
-  //     }
-  //     return token;
-  //   },
-  //   async session({ session, token, user }) {
-  //     if (token) {
-  //       session.user = {
-  //         id: token.id,
-  //         name: token.name,
-  //         email: token.email,
-  //       };
-  //     }
-  //     return session;
-  //   }
-  // },
+  session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login"
+  },
 };
 
 export const handler = NextAuth(authOptions);

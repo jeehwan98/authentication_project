@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react"
 import GithubSignInButton from "./GithubSignInButton";
+import { useRouter } from "next/navigation";
 
 interface LoginDetails {
   email: string;
@@ -12,10 +13,11 @@ interface LoginDetails {
 }
 
 function BottomNav() {
-  const className = 'text-primary text-blue-500 underline-offset-1 hover:underline'
+  const className = 'text-blue-400 hover:text-blue-600'
   return (
     <div className="flex justify-between items-center mt-4 text-sm">
-      <Link href="#" className={className}>
+      <Link href="#" className={className}
+      >
         Forgot password?
       </Link>
       <Link href="/register" className={className}>
@@ -38,7 +40,8 @@ function Line() {
 export default function LoginForm() {
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({ email: "", password: "" });
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
-
+  const [loginError, setLoginError] = useState<string>("");
+  const router = useRouter();
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginLoading(false);
@@ -46,11 +49,18 @@ export default function LoginForm() {
       const response = await signIn("credentials", {
         email: loginDetails.email,
         password: loginDetails.password,
-        redirect: true,
-        callbackUrl: "/"
+        redirect: false // to handle the error here
+        // redirect: true,
+        // callbackUrl: "/"
       });
 
-      console.log("response?:", response); // login success가 나오겠지?
+      if (response?.error) {
+
+        setLoginError(response.error);
+      } else {
+        console.log("login successful:", response);
+        router.push("/");
+      }
     } catch (error) {
       setLoginLoading(false);
       console.error("error occurred while logging in: ", error);
@@ -61,7 +71,7 @@ export default function LoginForm() {
     <div className="max-w-sm mx-auto mt-16 p-6">
       <form onSubmit={onSubmit} className="space-y-4">
         <input
-          className="w-full p-3 border rounded focus:outline-none"
+          className="w-full p-3 border rounded focus:outline-none text-base"
           type="text"
           name="email"
           placeholder="example@email.com"
@@ -69,13 +79,14 @@ export default function LoginForm() {
           onChange={(e) => setLoginDetails({ ...loginDetails, email: e.target.value })}
         />
         <input
-          className="w-full p-3 border rounded focus:outline-none"
+          className="w-full p-3 border rounded focus:outline-none text-base"
           type="password"
           name="password"
           placeholder="Password"
           value={loginDetails.password}
           onChange={(e) => setLoginDetails({ ...loginDetails, password: e.target.value })}
         />
+        {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
         <Button
           type="submit"
           disabled={loginLoading}
