@@ -1,3 +1,4 @@
+import ProfileAvatar from "@/components/Avatar";
 import { Button } from "@/components/ui/button";
 import { getServerSession } from "next-auth"
 import Image from "next/image";
@@ -19,8 +20,6 @@ function Tabs() {
 export default async function ProfilePage({ params }: { params: { userId: string } }) {
   const session = await getServerSession();
 
-  console.log('params?:', params.userId);
-
   const playlists = [
     {
       id: 1,
@@ -35,12 +34,11 @@ export default async function ProfilePage({ params }: { params: { userId: string
       <div className="max-w-4xl mx-auto p-6">
         {/* Profile Header */}
         <div className="flex items-center gap-6">
-          <Image
-            src={session?.user?.image as string}
-            width={80}
-            height={80}
-            alt="Profile"
-            className="w-24 h-24 rounded-full object-cover"
+          <ProfileAvatar
+            image={session?.user?.image || undefined}
+            name={session?.user?.name as string}
+            sx={{ width: 100, height: 100, marginRight: 2, }}
+            fontSize={50}
           />
           <div>
             <h1 className="text-3xl font-bold">{session?.user?.name}</h1>

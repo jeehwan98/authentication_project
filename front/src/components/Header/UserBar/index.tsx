@@ -1,12 +1,10 @@
 "use client";
 
 import { signOut, useSession } from "next-auth/react"
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { getUserId } from "@/constants";
 import { buttonVariants } from "@/components/ui/button";
-import { Avatar } from "@mui/material";
 import ProfileAvatar from "@/components/Avatar";
 
 function DropdownMenu({ children }: { children: React.ReactNode }) {
@@ -61,9 +59,10 @@ export default function UserBar() {
           <div className="relative" ref={dropdownRef}>
             <button onClick={toggleDown} className="flex items-center space-x-2 hover:text-black transition-colors duration-300 ease-in-out group">
               <ProfileAvatar
-                image={session?.user?.image as string}
+                image={session?.user?.image || undefined}
                 name={session?.user?.name as string}
-                sx={{ width: 40, height: 40, marginRight: 2 }}
+                sx={{ width: 35, height: 35, marginRight: 2 }}
+                fontSize={20}
               />
             </button>
             {isOpen && (

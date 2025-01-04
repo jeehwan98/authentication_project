@@ -1,21 +1,37 @@
+import { stringAvatar } from "@/constants";
 import { Avatar } from "@mui/material";
 
 interface ProfileAvatarProps {
-  image: string;
+  image?: string;
   name: string;
-  sx: object;
+  sx?: object;
+  fontSize: number;
 }
 
 export default function ProfileAvatar({
   image,
   name,
-  sx
+  sx,
+  fontSize
 }: ProfileAvatarProps) {
+  <Avatar
+    src={image}
+    alt={`${name}'s profile`}
+    sx={sx}
+  />
+
   return (
-    <Avatar
-      src={image}
-      alt={`${name}'s profile`}
-      sx={{ sx }}
-    />
-  );
+    image ? (
+      <Avatar
+        src={image}
+        alt={`${name}'s profile`}
+        sx={sx}
+      />
+    ) : (
+      <Avatar
+        {...stringAvatar(name)}
+        sx={{ ...stringAvatar(name).sx, fontSize: `${fontSize}px`, ...sx }}
+      />
+    )
+  )
 }
