@@ -1,11 +1,11 @@
 import AuthHeader from "@/components/Authentication/AuthHeader";
-import LoginForm from "@/components/Authentication/Form/LoginForm";
+import RegisterForm from "@/components/Authentication/Form/RegisterForm";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <div className="px-10 py-2">
       <AuthHeader />
-      <LoginForm />
+      <RegisterForm />
     </div>
   )
 }

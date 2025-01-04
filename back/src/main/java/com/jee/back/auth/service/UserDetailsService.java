@@ -1,6 +1,6 @@
 package com.jee.back.auth.service;
 
-import com.jee.approuterauthusingnextauthback.users.repository.UserRepository;
+import com.jee.back.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -18,6 +18,7 @@ public class User extends AbstractEntity {
     private String image;
     private String name;
     private boolean verified = false;
+    private String provider;
     @Enumerated(EnumType.STRING)
     private Role role;
 }

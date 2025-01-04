@@ -2,7 +2,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { URL } from "@/lib/backend-url";
+import { URL } from "@/constants";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -30,12 +30,13 @@ export const authOptions: NextAuthOptions = {
             }),
           });
           const responseData = await response.json();
+          console.log("info from backend:P ", responseData);
 
           if (!response.ok) {
             throw new Error(responseData.error || "Login failed");
           }
 
-          return responseData.success; // login success
+          return responseData.user; // login success
         } catch (error) {
           console.error("error occurred: ", error);
           throw error || "An unexpected error occurred. Please try again.";
@@ -45,10 +46,6 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      // console.log("token/;", token);
-      // console.log("user/;", user);
-      // console.log("account/;", account);
-      // console.log("profile/;", profile);
       if (account) {
         if (account.provider === "github" && profile) {
           // Handle GitHub login

@@ -1,6 +1,6 @@
 package com.jee.back.users.dto;
 
-import com.jee.approuterauthusingnextauthback.users.Role;
+import com.jee.back.users.Role;
 import lombok.*;
 
 @Data
@@ -16,4 +16,5 @@ public class RegisterUserDTO {
     private String name;
     private Role role;
     private String image;
+    private String provider;
 }

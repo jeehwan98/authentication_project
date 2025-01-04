@@ -1,6 +1,6 @@
 package com.jee.back.users.repository;
 
-import com.jee.approuterauthusingnextauthback.users.User;
+import com.jee.back.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

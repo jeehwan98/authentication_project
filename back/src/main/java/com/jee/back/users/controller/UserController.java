@@ -1,8 +1,8 @@
 package com.jee.back.users.controller;
 
-import com.jee.approuterauthusingnextauthback.users.dto.RegisterUserDTO;
-import com.jee.approuterauthusingnextauthback.users.dto.UserResponseDTO;
-import com.jee.approuterauthusingnextauthback.users.service.UserService;
+import com.jee.back.users.dto.RegisterUserDTO;
+import com.jee.back.users.dto.UserResponseDTO;
+import com.jee.back.users.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

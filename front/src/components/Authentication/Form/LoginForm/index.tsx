@@ -6,6 +6,7 @@ import Link from "next/link";
 import React, { useState } from "react"
 import GithubSignInButton from "./GithubSignInButton";
 import { useRouter } from "next/navigation";
+import InputField from "../InputField";
 
 interface LoginDetails {
   email: string;
@@ -70,16 +71,14 @@ export default function LoginForm() {
   return (
     <div className="max-w-sm mx-auto mt-16 p-6">
       <form onSubmit={onSubmit} className="space-y-4">
-        <input
-          className="w-full p-3 border rounded focus:outline-none text-base"
+        <InputField
           type="text"
           name="email"
           placeholder="example@email.com"
           value={loginDetails.email}
           onChange={(e) => setLoginDetails({ ...loginDetails, email: e.target.value })}
         />
-        <input
-          className="w-full p-3 border rounded focus:outline-none text-base"
+        <InputField
           type="password"
           name="password"
           placeholder="Password"

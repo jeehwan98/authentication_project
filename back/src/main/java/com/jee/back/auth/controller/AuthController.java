@@ -1,11 +1,11 @@
 package com.jee.back.auth.controller;
 
-import com.jee.approuterauthusingnextauthback.auth.dto.LoginDTO;
-import com.jee.approuterauthusingnextauthback.users.User;
-import com.jee.approuterauthusingnextauthback.users.dto.RegisterUserDTO;
-import com.jee.approuterauthusingnextauthback.users.dto.UserDTO;
-import com.jee.approuterauthusingnextauthback.users.dto.UserResponseDTO;
-import com.jee.approuterauthusingnextauthback.users.service.UserService;
+import com.jee.back.auth.dto.LoginDTO;
+import com.jee.back.users.Role;
+import com.jee.back.users.User;
+import com.jee.back.users.dto.RegisterUserDTO;
+import com.jee.back.users.dto.UserResponseDTO;
+import com.jee.back.users.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -30,6 +30,7 @@ public class AuthController {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/authenticate")
     public ResponseEntity<Map<String, Object>> authenticateUserGithub(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
@@ -37,14 +38,54 @@ public class AuthController {
         HashMap<String, Object> responseMap = new HashMap<>();
         Optional<User> existingUser = userService.findByEmail(registerUserDTO.getEmail());
         if (existingUser.isEmpty()) {
+            registerUserDTO.setProvider("github");
             UserResponseDTO response = userService.registerUser(registerUserDTO);
             responseMap.put("register", response);
             System.out.println("github 회원가입!" + responseMap);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseMap);
         }
-        // 존재하면 로그인 logic 적을 것
-        /** 존재하면 로그인 logic 작성하고 token 생성해서 return할 것 */
+
         responseMap.put("login", "login success");
+        return ResponseEntity.ok(responseMap);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginDTO loginDTO) {
+        HashMap<String, Object> responseMap = new HashMap<>();
+        Optional<User> existingUser = userService.findByEmail(loginDTO.getEmail());
+
+        if (existingUser.isEmpty()) {
+            responseMap.put("error", "No account found with this email address.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+        }
+
+        if (existingUser.get().getPassword() == null) {
+            responseMap.put("error", "This email is already registered. Please log in using GitHub.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+        }
+
+        if (!passwordEncoder.matches(loginDTO.getPassword(), existingUser.get().getPassword())) {
+            responseMap.put("error", "The password you entered is incorrect.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMap);
+        }
+
+        UserResponseDTO response = modelMapper.map(existingUser.get(), UserResponseDTO.class);
+        responseMap.put("user", response);
+        return ResponseEntity.ok().body(responseMap);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
+        System.out.println("registerDTO?: " + registerUserDTO);
+        HashMap<String, Object> responseMap = new HashMap<>();
+        Optional<User> existingUser = userService.findByEmail(registerUserDTO.getEmail());
+        if (existingUser.isPresent()) {
+            responseMap.put("error", "Email is already taken");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+        }
+        UserResponseDTO response = userService.registerUser(registerUserDTO);
+        System.out.println("response?: " + response);
+        responseMap.put("success", response);
         return ResponseEntity.ok(responseMap);
     }
 }
