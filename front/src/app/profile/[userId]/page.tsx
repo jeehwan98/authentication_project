@@ -1,7 +1,8 @@
+"use client"
+
 import ProfileAvatar from "@/components/Avatar";
 import { Button } from "@/components/ui/button";
-import { getServerSession } from "next-auth"
-import Image from "next/image";
+import { useEffect, useState } from "react";
 
 function Tabs() {
   return (
@@ -18,7 +19,14 @@ function Tabs() {
 }
 
 export default async function ProfilePage({ params }: { params: { userId: string } }) {
-  const session = await getServerSession();
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Only runs on the client
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+    console.log("Token from localStorage:", storedToken);
+  }, []);
 
   const playlists = [
     {
@@ -35,14 +43,14 @@ export default async function ProfilePage({ params }: { params: { userId: string
         {/* Profile Header */}
         <div className="flex items-center gap-6">
           <ProfileAvatar
-            image={session?.user?.image || undefined}
-            name={session?.user?.name as string}
+            image={token.image || undefined}
+            name={token.name as string}
             sx={{ width: 100, height: 100, marginRight: 2, }}
             fontSize={50}
           />
           <div>
-            <h1 className="text-3xl font-bold">{session?.user?.name}</h1>
-            <p className="text-gray-400">{(session?.user?.email as string)}</p>
+            <h1 className="text-3xl font-bold">{token.name}</h1>
+            <p className="text-gray-400">{(token.email as string)}</p>
             <p className="mt-2">
               <Button className="mr-2">
                 Customize channel
