@@ -1,14 +1,17 @@
-'use client'
+export function Auth({ children }: { children: ReactNode }) {
+  return (
+    <div>
+      {children}
+    </div>
+  )
+}
 
-import { usePathname } from "next/navigation";
+import { ReactNode } from "react";
 
-export default function AuthHeader() {
-  const pathname = usePathname();
-
-  const headerName = pathname === '/login' ? 'Sign In' : pathname === '/register' ? 'Register' : '';
+Auth.Header = function AuthHeader({ children }: { children: ReactNode }) {
   return (
     <h1 className="text-4xl font-bold text-center my-4 mb-4">
-      {headerName}
+      {children}
     </h1>
   )
 }

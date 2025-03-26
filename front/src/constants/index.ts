@@ -36,9 +36,11 @@ export function stringAvatar(name: string) {
   };
 }
 
-export
+export function capitalizeFirstLetter(input: string) {
+  return input.split('')[0].toUpperCase() + input.slice(1);
+}
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 export const URL = Object.freeze({
   HEADERS: { 'Content-Type': 'application/json' },
