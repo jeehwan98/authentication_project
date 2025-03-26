@@ -53,3 +53,7 @@ export function LoginFormContainer({ children }: ChildrenProps) {
     </div>
   )
 }
+
+export function RegisterFormContainer({ children }: ChildrenProps) {
+  return <div className="max-w-sm mx-auto mt-16 p-6">{children}</div>
+}
