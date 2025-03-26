@@ -1,5 +1,10 @@
-import { AuthContainer, AuthHeader, LoginFooter, LoginFormContainer } from "@/components/auth/components";
-import LoginForm from "@/components/auth/form/login";
+import {
+  AuthContainer,
+  AuthHeader,
+  LoginFooter,
+  LoginFormContainer,
+} from "@/components/auth/components";
+import LoginForm from "@/components/auth/form/login-form";
 
 export default function LoginPage() {
   return (
@@ -10,5 +15,5 @@ export default function LoginPage() {
         <LoginFooter />
       </LoginFormContainer>
     </AuthContainer>
-  )
+  );
 }

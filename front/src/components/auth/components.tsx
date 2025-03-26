@@ -1,12 +1,23 @@
 import Link from "next/link";
-import { ReactNode } from "react";
 import GithubSignInButton from "./form/github-button";
+import { ChildrenProps } from "@/interfaces";
+import { Fragment } from "react";
 
-export function AuthContainer({ children }: { children: ReactNode }) {
+export function AuthContainer({ children }: ChildrenProps) {
+  return <div className="px-10 py-2">{children}</div>
+}
+
+export function AuthHeader({ children }: ChildrenProps) {
+  return <h1 className="text-4xl font-bold text-center my-4 mb-4">{children}</h1>
+}
+
+export function LoginFooter() {
   return (
-    <div className="px-10 py-2">
-      {children}
-    </div>
+    <Fragment>
+      <LoginBottomLink />
+      <Line />
+      <GithubSignInButton />
+    </Fragment>
   )
 }
 
@@ -35,12 +46,10 @@ export function Line() {
   )
 }
 
-export function LoginBottomNav() {
+export function LoginFormContainer({ children }: ChildrenProps) {
   return (
-    <>
-      <LoginBottomLink />
-      <Line />
-      <GithubSignInButton />
-    </>
+    <div className="max-w-sm mx-auto mt-16 p-6">
+      {children}
+    </div>
   )
 }

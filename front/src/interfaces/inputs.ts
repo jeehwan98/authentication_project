@@ -6,3 +6,16 @@ export interface FormInputProps {
   error?: string;
   icon?: LucideIcon
 }
+
+export interface PasswordInputProps {
+  name: string;
+  placeholder: string;
+  toggleVisibility: () => void;
+  isVisible: boolean;
+  error?: string;
+}
+
+export interface PasswordVisibilityProps {
+  isVisible: boolean;
+  toggle: () => void;
+}
