@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useActionState, useState } from "react";
 import { FormInput, PasswordInput } from "@/components/ui/input";
-import { Mail, User } from "lucide-react";
+import { Loader2, Mail, User } from "lucide-react";
 import registerAction from "@/app/register/action";
 
 export default function RegisterForm() {
@@ -51,7 +51,7 @@ export default function RegisterForm() {
         className="w-full"
         disabled={isPending}
       >
-        {isPending ? 'Registering...' : 'Register'}
+        {isPending ? <Loader2 className="animate-spin" /> : "Register"}
       </Button>
     </form>
   )

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useActionState, useState } from "react"
 import { loginAction } from "@/app/login/action";
-import { Mail } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
 import { FormInput, PasswordInput } from "@/components/ui/input";
 
 export default function LoginForm() {
@@ -36,7 +36,7 @@ export default function LoginForm() {
         className="w-full"
         disabled={isPending}
       >
-        {isPending ? 'Logging in...' : 'Login'}
+        {isPending ? <Loader2 className="animate-spin" /> : "Login"}
       </Button>
     </form>
   )
