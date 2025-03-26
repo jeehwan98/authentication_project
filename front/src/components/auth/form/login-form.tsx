@@ -1,7 +1,6 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react"
 import GithubSignInButton from "./github-button";

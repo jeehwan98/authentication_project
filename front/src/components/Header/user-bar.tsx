@@ -1,6 +1,5 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react"
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { getUserId } from "@/constants";
@@ -32,7 +31,6 @@ function LogoutNavLink({ children, onClick }: { children: React.ReactNode, onCli
 }
 
 export default function UserBar() {
-  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +52,7 @@ export default function UserBar() {
 
   return (
     <>
-      {session ? (
+      {/* {session ? (
         <div className="relative">
           <div className="relative" ref={dropdownRef}>
             <button onClick={toggleDown} className="flex items-center space-x-2 hover:text-black transition-colors duration-300 ease-in-out group">
@@ -79,7 +77,7 @@ export default function UserBar() {
           <Link href="/login" className={buttonVariants({ variant: "outline" })}>Login</Link >
           <Link href="/register" className={buttonVariants({ variant: "outline" })}>Register</Link>
         </li>
-      )}
+      )} */}
     </>
   )
 }
