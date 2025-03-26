@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { getUserId } from "@/constants";
 import { buttonVariants } from "@/components/ui/button";
-import ProfileAvatar from "@/components/Avatar";
+import ProfileAvatar from "@/components/avatar";
 
 function DropdownMenu({ children }: { children: React.ReactNode }) {
   return (

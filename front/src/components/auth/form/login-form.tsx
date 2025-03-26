@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react"
-import GithubSignInButton from "./GithubSignInButton";
+import GithubSignInButton from "./login-form/GithubSignInButton/github-button";
 import { useRouter } from "next/navigation";
-import InputField from "../InputField";
+import InputField from "./input-field";
 
 interface LoginDetails {
   email: string;

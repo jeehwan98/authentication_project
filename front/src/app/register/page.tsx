@@ -1,5 +1,5 @@
-import AuthHeader from "@/components/Authentication/AuthHeader";
-import RegisterForm from "@/components/Authentication/Form/RegisterForm";
+import AuthHeader from "@/components/auth/auth-header";
+import RegisterForm from "@/components/auth/form/register-form";
 
 export default function RegisterPage() {
   return (
