@@ -1,17 +1,21 @@
 package com.jee.back.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.Getter;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "users")
 @Data
-public class User extends AbstractEntity {
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String email;
     private String password;
     private String image;
@@ -20,4 +24,5 @@ public class User extends AbstractEntity {
     private String provider;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private LocalDateTime createdAt;
 }

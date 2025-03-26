@@ -12,10 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,13 +25,11 @@ import java.util.Optional;
 public class AuthController {
 
     private final UserService userService;
-    private final ModelMapper modelMapper;
-    private final PasswordEncoder passwordEncoder;
+    HashMap<String, Object> responseMap = new HashMap<>();
 
     @PostMapping("/authenticate")
     public ResponseEntity<Map<String, Object>> authenticateUserGithub(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
         System.out.println("authentication???");
-        HashMap<String, Object> responseMap = new HashMap<>();
         Optional<User> existingUser = userService.findByEmail(registerUserDTO.getEmail());
         if (existingUser.isEmpty()) {
             registerUserDTO.setProvider("github");
@@ -49,27 +44,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginDTO loginDTO) {
-        HashMap<String, Object> responseMap = new HashMap<>();
-        Optional<User> existingUser = userService.findByEmail(loginDTO.getEmail());
+    public ResponseEntity<Map<String, Object>> login(@ModelAttribute LoginDTO loginDTO) {
+        responseMap = userService.login(loginDTO);
 
-        if (existingUser.isEmpty()) {
-            responseMap.put("error", "No account found with this email address.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
-        }
-
-        if (existingUser.get().getPassword() == null) {
-            responseMap.put("error", "This email is already registered. Please log in using GitHub.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
-        }
-
-        if (!passwordEncoder.matches(loginDTO.getPassword(), existingUser.get().getPassword())) {
-            responseMap.put("error", "The password you entered is incorrect.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseMap);
-        }
-
-        UserResponseDTO response = modelMapper.map(existingUser.get(), UserResponseDTO.class);
-        responseMap.put("user", response);
         return ResponseEntity.ok().body(responseMap);
     }
 
