@@ -20,6 +20,4 @@ logging:
         security: debug
 
 jwt:
-  expiration-time: 1800000
-  refresh-expiration-time: 604800000
   secret-key: adfasdfjnonqiero2341234i12312i1201nifqnw0fasdjaniw
