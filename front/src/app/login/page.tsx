@@ -1,5 +1,5 @@
 import { AuthContainer, AuthHeader, LoginFormContainer } from "@/components/auth/components";
-import GithubSignInButton from "@/components/auth/form/github-button";
+import GithubSignInButton from "@/components/auth/github-button";
 import LoginForm from "@/components/auth/form/login";
 import Link from "next/link";
 import { Fragment } from "react";

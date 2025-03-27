@@ -11,10 +11,10 @@ import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
     private final int id;
-    private final  String email;
-    private final  String password;
-    private final  String image;
-    private final  String name;
+    private final String email;
+    private final String password;
+    private final String image;
+    private final String name;
     private boolean verified = false;
     private final String provider;
     private  final Role role;
@@ -25,7 +25,6 @@ public class UserDetailsImpl implements UserDetails {
         this.password = user.getPassword();
         this.image = user.getImage();
         this.name = user.getName();
-        this.verified = user.isVerified();
         this.provider = user.getProvider();
         this.role = user.getRole();
         this.createdAt = user.getCreatedAt();

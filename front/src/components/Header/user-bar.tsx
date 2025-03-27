@@ -49,30 +49,34 @@ export default function UserBar() {
 
   const toggleDown = () => { setIsOpen((prev) => !prev); }
   const closeDropdown = () => { setIsOpen(false); }
+  const handleSignOut = () => {
+    console.log("close drop down menu")
+  }
 
   return (
     <>
-      {/* {session ? (
-        <div className="relative">
-          <div className="relative" ref={dropdownRef}>
-            <button onClick={toggleDown} className="flex items-center space-x-2 hover:text-black transition-colors duration-300 ease-in-out group">
-              <ProfileAvatar
+      {/* {session ? ( */}
+      <div className="relative">
+        <div className="relative" ref={dropdownRef}>
+          <button onClick={toggleDown} className="flex items-center space-x-2 hover:text-black transition-colors duration-300 ease-in-out group">
+            <div>User</div>
+            {/* <ProfileAvatar
                 image={session?.user?.image || undefined}
                 name={session?.user?.name as string}
                 sx={{ width: 35, height: 35, marginRight: 2 }}
                 fontSize={20}
-              />
-            </button>
-            {isOpen && (
-              <DropdownMenu>
-                <NavLink href={getUserId(session?.user?.email as string)} onClick={closeDropdown}>내 프로필</NavLink>
-                <NavLink href="/setting" onClick={closeDropdown}>설정</NavLink>
-                <LogoutNavLink onClick={() => signOut()}>로그아웃</LogoutNavLink>
-              </DropdownMenu>
-            )}
-          </div>
+              /> */}
+          </button>
+          {isOpen && (
+            <DropdownMenu>
+              <NavLink href="profile" onClick={closeDropdown}>내 프로필</NavLink>
+              <NavLink href="/setting" onClick={closeDropdown}>설정</NavLink>
+              <LogoutNavLink onClick={handleSignOut}>로그아웃</LogoutNavLink>
+            </DropdownMenu>
+          )}
         </div>
-      ) : (
+      </div>
+      {/* ) : (
         <li className="buttons px-4 space-x-2">
           <Link href="/login" className={buttonVariants({ variant: "outline" })}>Login</Link >
           <Link href="/register" className={buttonVariants({ variant: "outline" })}>Register</Link>
