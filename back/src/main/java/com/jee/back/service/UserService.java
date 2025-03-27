@@ -1,5 +1,7 @@
 package com.jee.back.service;
 
+import com.jee.back.constant.ERROR_MESSAGE;
+import com.jee.back.constant.SUCCESS_MESSAGE;
 import com.jee.back.dto.*;
 import com.jee.back.entity.Role;
 import com.jee.back.entity.User;
@@ -34,20 +36,20 @@ public class UserService {
     Map<String, Object> responseMap = new HashMap<>();
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("user not found with email: " + email));
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(ERROR_MESSAGE.USER_NOT_FOUND + email));
     }
 
     public ApiResponse<LoginResponse> login(LoginDTO loginDTO,
                                             HttpServletRequest request,
                                             HttpServletResponse response) {
-        Optional<User> user = findByEmail(loginDTO.getEmail());
+        Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
 
         if (user.isEmpty()) {
-            return ApiResponse.failure("Invalid user");
+            return ApiResponse.failure(ERROR_MESSAGE.INVALID_USER);
         }
 
         if (!checkPassword(user.get(), loginDTO.getPassword())) {
-            return ApiResponse.failure("Invalid password");
+            return ApiResponse.failure(ERROR_MESSAGE.INVALID_PASSWORD);
         }
         UserResponseDTO userResponse = modelMapper.map(user.get(), UserResponseDTO.class);
         // set logged in user to securityContextHolder
@@ -65,7 +67,7 @@ public class UserService {
                 "accessToken",
                 "refreshToken"
         );
-        return ApiResponse.success("Login success", loginResponse);
+        return ApiResponse.success(SUCCESS_MESSAGE.LOGIN, loginResponse);
     }
 
     @Transactional
@@ -75,11 +77,7 @@ public class UserService {
         User user = modelMapper.map(registerUserDTO, User.class);
         userRepository.save(user);
 
-        return ApiResponse.success("Registration success", null);
-    }
-
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return ApiResponse.success(SUCCESS_MESSAGE.REGISTRATION, null);
     }
 
     public boolean checkPassword(User user, String inputtedPassword) {
