@@ -1,10 +1,14 @@
-import { URL } from "@/constants";
-import { RegisterDetails } from "@/interfaces";
+import { LoginDetails, RegisterDetails } from "@/interfaces";
+import { URL } from "@/lib/constants/url";
+
+export async function loginAPI(data: LoginDetails) {
+  console.log("inputted data?: ", data);
+
+}
 
 export async function registerAPI(data: RegisterDetails) {
-  console.log("URL?: ", URL.REGISTER_USER_EMAIL);
   try {
-    const response = await fetch(URL.REGISTER_USER_EMAIL, {
+    const response = await fetch(`${URL.BASE_URL}/auth/register`, {
       method: "POST",
       headers: URL.HEADERS,
       body: JSON.stringify(data),

@@ -1,4 +1,4 @@
-import { stringAvatar } from "@/constants";
+import { stringAvatar } from "@/lib/constants/user";
 import { Avatar } from "@mui/material";
 
 interface ProfileAvatarProps {

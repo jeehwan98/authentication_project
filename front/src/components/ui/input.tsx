@@ -2,8 +2,8 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 import { FormInputProps, PasswordInputProps } from "@/interfaces/inputs"
-import { capitalizeFirstLetter } from "@/constants"
 import { Eye, EyeOff, Lock } from "lucide-react"
+import { capitalizeFirstLetter } from "@/lib/constants"
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, ...props }, ref) => {

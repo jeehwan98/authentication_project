@@ -1,6 +1,6 @@
 import { ChildrenProps } from "@/interfaces"
 import NavBar from "./nav-bar"
-import UserBar, { NavigationMenuDemo } from "./user-bar"
+import UserBar from "./user-bar"
 
 function HeaderContainer({ children }: ChildrenProps) {
   return <header className="h-16 bg-background/60 sticky top-0 border-b px-8 backdrop-blur flex items-center z-50">{children}</header>
@@ -15,8 +15,8 @@ export default function Header() {
     <HeaderContainer>
       <NavContainer>
         <NavBar />
-        {/* <UserBar /> */}
-        <NavigationMenuDemo />
+        <UserBar />
+        {/* <NavigationMenuDemo /> */}
       </NavContainer>
     </HeaderContainer>
   )

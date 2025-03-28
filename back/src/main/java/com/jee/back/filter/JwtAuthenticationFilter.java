@@ -38,22 +38,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader(AuthConstants.AUTH_HEADER);
 
-        try {
-            if (header != null && !header.equalsIgnoreCase("")) {
-                String token = splitHeader(header);
-
-                if (jwtTokenUtil.validateToken(token)) {
-                    String email = jwtTokenUtil.extractEmail(token);
-                    System.out.println("email?: " + email);
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                    filterChain.doFilter(request, response);
-                }
-            }
-        } catch (Exception e) {
-            throw e;
-        }
+//        try {
+//            if (header != null && !header.equalsIgnoreCase("")) {
+//                String token = splitHeader(header);
+//
+//                if (jwtTokenUtil.validateToken(token)) {
+//                    String email = jwtTokenUtil.extractEmail(token);
+//                    System.out.println("email?: " + email);
+//                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+//                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+//                    SecurityContextHolder.getContext().setAuthentication(authentication);
+//                    filterChain.doFilter(request, response);
+//                }
+//            }
+//        } catch (Exception e) {
+//            throw e;
+//        }
 
         filterChain.doFilter(request, response);
     }

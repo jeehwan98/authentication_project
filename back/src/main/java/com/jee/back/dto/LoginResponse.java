@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class LoginResponse {
-    private UserResponseDTO user;
+    private UserResponse user;
     private String accessToken;
     private String refreshToken;
 
-    public LoginResponse(UserResponseDTO user, String accessToken, String refreshToken) {
+    public LoginResponse(UserResponse user, String accessToken, String refreshToken) {
         this.user = user;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
