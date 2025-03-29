@@ -32,12 +32,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
-        ApiResponse response;
-        Optional<User> existingUser = userRepository.findByEmail(registerUserDTO.getEmail());
-        if (existingUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.failure("email","Email is taken"));
-        }
-        response = userService.register(registerUserDTO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(userService.register(registerUserDTO));
     }
 }

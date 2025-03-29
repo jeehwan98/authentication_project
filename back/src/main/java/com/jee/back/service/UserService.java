@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -53,17 +57,11 @@ public class UserService {
         if (!checkPassword(user.get(), loginDTO.getPassword())) {
             return ApiResponse.failure("password", ERROR_MESSAGE.INVALID_PASSWORD);
         }
-        UserResponse userResponse = modelMapper.map(user.get(), UserResponse.class);
-        // set logged in user to securityContextHolder
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.get().getEmail());
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.getAuthorities()
-        );
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authToken);
 
+        UserResponse userResponse = modelMapper.map(user.get(), UserResponse.class);
+
+        // set credentials to contextHolder and cookies
+        setContextCredentials(user.get(), request);
         cookieUtil.createCookies(response, user.get());
 
         LoginResponse loginResponse = new LoginResponse(
@@ -76,18 +74,38 @@ public class UserService {
 
     @Transactional
     public ApiResponse register(@Valid RegisterUserDTO registerUserDTO) {
-        registerUserDTO.setRole(Role.USER);
-        registerUserDTO.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
-        User user = modelMapper.map(registerUserDTO, User.class);
+        Optional<User> existingUser = userRepository.findByEmail(registerUserDTO.getEmail());
+        if (existingUser.isPresent()) {
+            return ApiResponse.failure("email", ERROR_MESSAGE.EMAIL_EXISTS);
+        }
+
+        User user = registerUser(registerUserDTO);
         userRepository.save(user);
 
         return ApiResponse.success(SUCCESS_MESSAGE.REGISTRATION, null);
     }
 
     public boolean checkPassword(User user, String inputtedPassword) {
-        if (!passwordEncoder.matches(inputtedPassword, user.getPassword())) {
-            return false;
-        }
+        if (!passwordEncoder.matches(inputtedPassword, user.getPassword())) return false;
         return true;
+    }
+
+    /** set logged in user to securityContextHolder */
+    private void setContextCredentials(User user, HttpServletRequest request) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+    }
+
+    private User registerUser(RegisterUserDTO registerUserDTO) {
+        registerUserDTO.setRole(Role.USER);
+        registerUserDTO.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
+        registerUserDTO.setCreatedAt(LocalDateTime.now());
+        return modelMapper.map(registerUserDTO, User.class);
     }
 }

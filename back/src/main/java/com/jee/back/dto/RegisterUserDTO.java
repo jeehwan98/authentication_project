@@ -3,6 +3,8 @@ package com.jee.back.dto;
 import com.jee.back.entity.Role;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,10 +13,9 @@ import lombok.*;
 public class RegisterUserDTO {
     private Long id;
     private String email;
-    private String password;
-    private boolean verified;
-    private String name;
     private Role role;
+    private String password;
+    private String name;
     private String image;
-    private String provider;
+    private LocalDateTime createdAt;
 }
