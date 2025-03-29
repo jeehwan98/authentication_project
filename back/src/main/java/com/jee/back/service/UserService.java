@@ -47,11 +47,11 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
 
         if (user.isEmpty()) {
-            return ApiResponse.failure(ERROR_MESSAGE.INVALID_USER);
+            return ApiResponse.failure("email", ERROR_MESSAGE.INVALID_USER);
         }
 
         if (!checkPassword(user.get(), loginDTO.getPassword())) {
-            return ApiResponse.failure(ERROR_MESSAGE.INVALID_PASSWORD);
+            return ApiResponse.failure("password", ERROR_MESSAGE.INVALID_PASSWORD);
         }
         UserResponse userResponse = modelMapper.map(user.get(), UserResponse.class);
         // set logged in user to securityContextHolder

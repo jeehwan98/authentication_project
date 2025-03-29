@@ -1,30 +1,29 @@
 package com.jee.back.dto;
 
+import java.util.Collections;
+
 public class ApiResponse<T> {
     private boolean success;
-    private String message;
+    private Object message;
     private T data;
 
-    public ApiResponse(boolean success, String message, T data) {
-        this.success = success;
-        this.message = message;
-        this.data = data;
-    }
-
-    public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(true, null, data);
-    }
-
     public static <T> ApiResponse<T> success(String message, T data) {
-        return new ApiResponse<>(true, message, data);
+        ApiResponse<T> response = new ApiResponse<>();
+        response.success = true;
+        response.message = message;
+        response.data = data;
+        return response;
     }
 
-    public static <T> ApiResponse<T> failure(String message) {
-        return new ApiResponse<>(false, message, null);
+    public static <T> ApiResponse<T> failure(String key, String errorMessage) {
+        ApiResponse<T> response = new ApiResponse<>();
+        response.success = false;
+        response.message = Collections.singletonMap(key, errorMessage); // Returns a Map
+        response.data = null;
+        return response;
     }
 
-    // Getters and setters
     public boolean isSuccess() { return success; }
-    public String getMessage() { return message; }
+    public Object getMessage() { return message; }
     public T getData() { return data; }
 }

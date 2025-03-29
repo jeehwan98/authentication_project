@@ -10,7 +10,7 @@ export type LoginActionState = {
   };
 }
 
-export async function loginAction(
+export default async function loginAction(
   prevState: LoginActionState,
   formData: FormData
 ): Promise<LoginActionState> {
@@ -22,7 +22,19 @@ export async function loginAction(
 
   const response = await loginAPI({ email, password });
 
-  return {
-    success: true
+  if (!response.success) {
+    const errorMessage = response.message;
+
+    if (typeof errorMessage === "object" && errorMessage !== null) {
+      return {
+        success: false,
+        errors: {
+          email: "email" in errorMessage ? errorMessage.email : undefined,
+          password: "password" in errorMessage ? errorMessage.password : undefined,
+        },
+      };
+    }
   }
+
+  return { success: true };
 }

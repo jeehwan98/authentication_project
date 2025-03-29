@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import React, { useActionState, useState } from "react"
-import { loginAction } from "@/app/login/action";
 import { Loader2, Mail } from "lucide-react";
 import { FormInput, PasswordInput } from "@/components/ui/input";
+import loginAction from "@/app/login/action";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);

@@ -35,7 +35,7 @@ public class AuthController {
         ApiResponse response;
         Optional<User> existingUser = userRepository.findByEmail(registerUserDTO.getEmail());
         if (existingUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.failure("Email is taken"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.failure("email","Email is taken"));
         }
         response = userService.register(registerUserDTO);
         return ResponseEntity.ok(response);

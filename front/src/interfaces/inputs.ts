@@ -19,3 +19,8 @@ export interface PasswordVisibilityProps {
   isVisible: boolean;
   toggle: () => void;
 }
+
+export interface ConfirmPasswordProps {
+  password: string;
+  confirmPassword: string;
+}
