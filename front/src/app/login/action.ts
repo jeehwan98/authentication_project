@@ -1,5 +1,6 @@
 "use server"
 
+import { cookies } from "next/headers";
 import { loginAPI } from "../api/auth";
 
 export type LoginActionState = {
@@ -34,6 +35,26 @@ export default async function loginAction(
         },
       };
     }
+  }
+
+  if (response.data?.accessToken) {
+    const cookieStore = await cookies();
+    cookieStore.set("accessToken", response.data.accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+    });
+  }
+
+  if (response.data?.refreshToken) {
+    const cookieStore = await cookies();
+    cookieStore.set("refreshToken", response.data.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+    });
   }
 
   return { success: true };

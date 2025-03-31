@@ -27,7 +27,8 @@ export async function loginAPI(data: LoginDetailsProps): Promise<LoginResponsePr
 
   return {
     success: true,
-    message: responseData.message
+    message: responseData.message,
+    data: responseData.data
   }
 }
 
