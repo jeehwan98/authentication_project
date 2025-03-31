@@ -1,26 +1,16 @@
 import { User } from "@/interfaces/user";
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
 
 export async function getServerSession() {
-  const headersData = await headers();
-  const cookieHeader = headersData.get("cookie") || "";
-
-  // extract tokens from the cookie header
-  const accessToken = cookieHeader
-    .split("; ")
-    .find((cookie) => cookie.startsWith("accessToken="))
-    ?.split("=")[1];
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
 
   if (!accessToken) {
     console.log("No access token found.");
     return null;
   }
-
-  const refreshToken = cookieHeader
-    .split("; ")
-    .find((cookie) => cookie.startsWith("refreshToken="))
-    ?.split("=")[1];
 
   if (!accessToken) {
     console.log("No access token found.");
