@@ -1,10 +1,9 @@
-"use server"
+"use client"
 
-import { getServerSession } from "@/lib/auth/auth-server";
+import { getClientSession } from "@/lib/constants/session-provider";
 
-export default async function UserProfile() {
-  const user = await getServerSession();
-  console.log("user: ", user);
+export default function UserProfile() {
+  const { user } = getClientSession();
 
   if (!user) {
     return <div>User not found</div>
@@ -12,8 +11,8 @@ export default async function UserProfile() {
 
   return (
     <div>
-      <h1>{(user as any).name}</h1>
-      <p>{(user as any).email}</p>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
     </div>
   )
 }
