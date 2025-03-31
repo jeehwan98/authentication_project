@@ -8,12 +8,10 @@ export async function getServerSession() {
   const refreshToken = cookieStore.get("refreshToken")?.value;
 
   if (!accessToken) {
-    console.log("No access token found.");
     return null;
   }
 
   if (!accessToken) {
-    console.log("No access token found.");
     return null;
   }
 

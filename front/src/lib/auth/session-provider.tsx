@@ -3,7 +3,7 @@
 import { User } from "@/interfaces/user";
 import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { URL } from "../constants/url";
+import { METHOD, URL } from "../constants/url";
 
 interface SessionContextType {
   user: User | null;
@@ -53,11 +53,17 @@ export function SessionProvider({
 
   const signOut = async () => {
     try {
-      await fetch(`${URL.BASE_URL}/auth/logout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch(`${URL.BASE_URL}/auth/logout`, {
+        method: METHOD.POST,
+        headers: URL.HEADERS,
+        credentials: "include",
       });
+
+      console.log("response?: ", response);
       setUser(null);
+
+      // window.location.href = "/"; // force reload to re-render RootLayout
+      // window.location.reload();
     } catch (error) {
       console.error("Sign out failed: ", error);
     }

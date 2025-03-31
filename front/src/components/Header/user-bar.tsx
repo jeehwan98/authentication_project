@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { getClientSession } from "@/lib/auth/session-provider";
+import ProfileAvatar from "../avatar";
+import { buttonVariants } from "../ui/button";
 
 function DropdownMenu({ children }: { children: React.ReactNode }) {
   return (
@@ -30,6 +33,7 @@ function LogoutNavLink({ children, onClick }: { children: React.ReactNode, onCli
 export default function UserBar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { user, signOut } = getClientSession();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -46,39 +50,35 @@ export default function UserBar() {
 
   const toggleDown = () => { setIsOpen((prev) => !prev); }
   const closeDropdown = () => { setIsOpen(false); }
-  const handleSignOut = () => {
-    console.log("close drop down menu")
-  }
 
   return (
     <>
-      {/* {session ? ( */}
-      <div className="relative">
-        <div className="relative" ref={dropdownRef}>
-          <button onClick={toggleDown} className="flex items-center space-x-2 hover:text-black transition-colors duration-300 ease-in-out group">
-            <div>User</div>
-            {/* <ProfileAvatar
-                image={session?.user?.image || undefined}
-                name={session?.user?.name as string}
-                sx={{ width: 35, height: 35, marginRight: 2 }}
+      {user ? (
+        <div className="relative">
+          <div className="relative" ref={dropdownRef}>
+            <button onClick={toggleDown} className="flex items-center space-x-2 hover:text-black transition-colors duration-300 ease-in-out group">
+              <ProfileAvatar
+                image={user?.image || undefined}
+                name={user?.name as string}
+                sx={{ width: 45, height: 45, marginRight: 2 }}
                 fontSize={20}
-              /> */}
-          </button>
-          {isOpen && (
-            <DropdownMenu>
-              <NavLink href="profile" onClick={closeDropdown}>내 프로필</NavLink>
-              <NavLink href="/setting" onClick={closeDropdown}>설정</NavLink>
-              <LogoutNavLink onClick={handleSignOut}>로그아웃</LogoutNavLink>
-            </DropdownMenu>
-          )}
+              />
+            </button>
+            {isOpen && (
+              <DropdownMenu>
+                <NavLink href="profile" onClick={closeDropdown}>내 프로필</NavLink>
+                <NavLink href="/setting" onClick={closeDropdown}>설정</NavLink>
+                <LogoutNavLink onClick={signOut}>로그아웃</LogoutNavLink>
+              </DropdownMenu>
+            )}
+          </div>
         </div>
-      </div>
-      {/* ) : (
+      ) : (
         <li className="buttons px-4 space-x-2">
           <Link href="/login" className={buttonVariants({ variant: "outline" })}>Login</Link >
           <Link href="/register" className={buttonVariants({ variant: "outline" })}>Register</Link>
         </li>
-      )} */}
+      )}
     </>
   )
 }
