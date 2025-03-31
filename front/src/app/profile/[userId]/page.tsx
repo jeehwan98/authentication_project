@@ -1,6 +1,6 @@
 "use client"
 
-import { getClientSession } from "@/lib/constants/session-provider";
+import { getClientSession } from "@/lib/auth/session-provider";
 
 export default function UserProfile() {
   const { user } = getClientSession();

@@ -3,7 +3,7 @@
 import { User } from "@/interfaces/user";
 import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { URL } from "./url";
+import { URL } from "../constants/url";
 
 interface SessionContextType {
   user: User | null;
@@ -20,7 +20,7 @@ export function SessionProvider({
   children: ReactNode,
   initialUser: User | null
 }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(initialUser);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
