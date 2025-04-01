@@ -1,9 +1,7 @@
-"use client"
-
-import { getClientSession } from "@/lib/auth/session-provider";
+import { getServerSession } from "@/lib/auth/auth-server";
 
 export default function UserProfile() {
-  const { user } = getClientSession();
+  const { user } = getServerSession();
 
   if (!user) {
     return <div>User not found</div>
