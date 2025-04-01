@@ -59,11 +59,12 @@ export function SessionProvider({
         credentials: "include",
       });
 
-      console.log("response?: ", response);
-      setUser(null);
+      const responseData = await response.json();
 
-      // window.location.href = "/"; // force reload to re-render RootLayout
-      // window.location.reload();
+      if (response.ok && responseData.success) {
+        setUser(null);
+      }
+
     } catch (error) {
       console.error("Sign out failed: ", error);
     }

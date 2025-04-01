@@ -1,5 +1,6 @@
 package com.jee.back.controller;
 
+import com.jee.back.constant.SUCCESS_MESSAGE;
 import com.jee.back.dto.*;
 import com.jee.back.repository.UserRepository;
 import com.jee.back.service.UserService;
@@ -34,7 +35,8 @@ public class AuthController {
     public ResponseEntity<ApiResponse> logout(HttpServletResponse response) {
         cookieUtil.clearCookies(response);
         SecurityContextHolder.clearContext();
-        return ResponseEntity.ok(ApiResponse.success("message", "Credentials cleared"));
+        log.info(ApiResponse.success(SUCCESS_MESSAGE.LOGOUT, null));
+        return ResponseEntity.ok(ApiResponse.success(SUCCESS_MESSAGE.LOGOUT, null));
     }
 
     @PostMapping("/register")
