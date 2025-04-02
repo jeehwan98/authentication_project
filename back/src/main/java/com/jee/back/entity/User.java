@@ -22,4 +22,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
     private LocalDateTime createdAt;
+
+    public User(String email, String name, String image) {
+        this.email = email;
+        this.name = name;
+        this.image = image;
+        this.role = Role.USER;
+        this.createdAt = LocalDateTime.now();
+    }
 }
