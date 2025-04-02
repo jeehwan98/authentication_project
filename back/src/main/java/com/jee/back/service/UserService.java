@@ -23,7 +23,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -102,5 +104,19 @@ public class UserService {
         registerUserDTO.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
         registerUserDTO.setCreatedAt(LocalDateTime.now());
         return modelMapper.map(registerUserDTO, User.class);
+    }
+
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getEmail(),
+                        user.getRole(),
+                        user.getImage(),
+                        user.getName(),
+                        user.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 }

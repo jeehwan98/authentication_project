@@ -1,23 +1,23 @@
 package com.jee.back.filter;
 
 import com.jee.back.util.JwtTokenUtil;
-import com.jee.back.utils.AuthConstants;
+import com.jee.back.util.SecurityUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
+import java.util.Arrays;
 
 /** filter that intercepts requests and validates JWT token */
 @Log4j2
@@ -29,49 +29,60 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getRequestURI();
-        return path.startsWith("/api/v1/auth/login");
-    }
-
-    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader(AuthConstants.AUTH_HEADER);
+        String token = extractTokenFromCookies(request);
+        String email = null;
+//        String header = request.getHeader(AuthConstants.AUTH_HEADER);
 
-//        try {
-//            if (header != null && !header.equalsIgnoreCase("")) {
-//                String token = splitHeader(header);
-//
-//                if (jwtTokenUtil.validateToken(token)) {
-//                    String email = jwtTokenUtil.extractEmail(token);
-//                    System.out.println("email?: " + email);
-//                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-//                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-//                    SecurityContextHolder.getContext().setAuthentication(authentication);
-//                    filterChain.doFilter(request, response);
-//                }
-//            }
-//        } catch (Exception e) {
-//            throw e;
-//        }
+        if (token != null && !token.isEmpty()) {
+            email = jwtTokenUtil.extractEmail(token);
+        }
+
+        log.info("email: ", email);
+        log.info("user is authenticated... process", email);
+
+        try {
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                if (jwtTokenUtil.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    String email123 = SecurityUtil.getAuthenticatedUserEmail();
+                }
+            }
+        } catch (Exception e) {
+            throw e;
+        }
 
         filterChain.doFilter(request, response);
     }
 
-    private String splitHeader(String header) {
-        if (header != null) {
-            return header.split(" ")[1];
-        } else {
-            return null;
-        }
-    }
-
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AuthConstants.AUTH_HEADER);
-        System.out.println("bearerToken: " + bearerToken);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(AuthConstants.TOKEN_TYPE)) {
-            return bearerToken.substring(7);
+    private String extractTokenFromCookies(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            return Arrays.stream(request.getCookies())
+                    .filter(cookie -> "accessToken".equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .findFirst()
+                    .orElse(null);
         }
         return null;
     }
+
+//    private String splitHeader(String header) {
+//        if (header != null) {
+//            return header.split(" ")[1];
+//        } else {
+//            return null;
+//        }
+//    }
+//
+//    private String resolveToken(HttpServletRequest request) {
+//        String bearerToken = request.getHeader(AuthConstants.AUTH_HEADER);
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(AuthConstants.TOKEN_TYPE)) {
+//            return bearerToken.substring(7);
+//        }
+//        return null;
+//    }
 }
